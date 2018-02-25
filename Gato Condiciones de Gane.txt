@@ -1,0 +1,112 @@
+Clase HacerGanador
+//
+        public bool CrearGanador(char[,] matriz, int size, char ficha)
+        {
+            bool elResultado = false;
+            var validacion = new Dominio.Validaciones.ValidarGanador();
+            char[] vectorH = new char[size];
+            char[] vectorV = new char[size];
+            char[] vectorDD = new char[size];
+            char[] vectorDI = new char[size];
+            for (int i = 0; i < size; i++)
+            {
+                vectorDD[i] = ' ';
+                vectorDI[i] = ' ';
+            }
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    vectorH[j] = matriz[i, j];
+                }
+                elResultado = validacion.HayGanador(vectorH, 3, ficha);
+                if (elResultado == true)
+                {
+                    return elResultado;
+                }
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    vectorV[j] = matriz[j, i];
+                }
+                elResultado = validacion.HayGanador(vectorV, 3, ficha);
+                if (elResultado == true)
+                {
+                    return elResultado;
+                }
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if ((i + 2 < size) && (j + 2 < size))
+                    {
+                        for (int k = 0; (k < size) && (i + k < size) && (j + k < size); k++)
+                        {
+                            vectorDD[k] = matriz[i + k, j + k];
+                        }
+                    }
+                    elResultado = validacion.HayGanador(vectorDD, 3, ficha);
+                    if (elResultado == true)
+                    {
+                        return elResultado;
+                    }
+                }
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if ((i + 2 < size) && (j + 2 < size))
+                    {
+                        if ((i - 2 >= 0) && (j - 2 >= 0))
+                        {
+                            for (int k = 0; (k < size) && (i - k < size) && (j - k < size); k++)
+                            {
+                                vectorDI[k] = matriz[i - k, j - k];
+                            }
+                        }
+                    }
+                    elResultado = validacion.HayGanador(vectorDI, 3, ficha);
+                    if (elResultado == true)
+                    {
+                        return elResultado;
+                    }
+                }
+            }
+            return elResultado;
+        }
+//
+
+
+
+
+Clase ValidarGanador
+//
+        public bool HayGanador(char[] vectorH, int laCantidadDeOcurencias, char Ficha)
+        {
+            bool elResultado = false;
+            int largoVector = vectorH.Length;
+            int contadorOcurrencias = 0;
+            char ocurrenciaAnterior = ' ';
+            for (int i = 0; (i < largoVector) && (contadorOcurrencias < laCantidadDeOcurencias); i++)
+            {
+                if (vectorH[i].Equals(ocurrenciaAnterior) && vectorH[i].Equals(Ficha))
+                {
+                    contadorOcurrencias++;
+                }
+                else
+                {
+                    ocurrenciaAnterior = vectorH[i];
+                    contadorOcurrencias = 1;
+                }
+            }
+            elResultado = contadorOcurrencias == laCantidadDeOcurencias;
+            return elResultado;
+        }
+//
